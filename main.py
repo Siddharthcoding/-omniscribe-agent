@@ -33,8 +33,8 @@ def verify_auth(authorization: str | None = Header(None)):
 
 
 @app.post("/process", response_model=ProcessResponse)
-async def process_endpoint(req: ProcessRequest, auth=Header(None)):
-    verify_auth(auth)
+async def process_endpoint(req: ProcessRequest, authorization: str | None = Header(None)):
+    verify_auth(authorization)
 
     try:
         await run_pipeline(req.video_id, req.full_text)
