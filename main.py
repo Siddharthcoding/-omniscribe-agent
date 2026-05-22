@@ -83,10 +83,8 @@ async def fetch_transcript_endpoint(req: FetchTranscriptRequest, authorization: 
         ]
         full_text = " ".join(s.text for s in fetched)
         return {"segments": segments, "full_text": full_text, "language": fetched.language}
-    except Exception:
-        pass
-
-    raise HTTPException(500, "Could not fetch transcript")
+    except Exception as e:
+        raise HTTPException(500, f"Transcript fetch failed: {e}")
 
 
 @app.get("/health")
