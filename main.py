@@ -76,14 +76,13 @@ async def fetch_transcript_endpoint(req: FetchTranscriptRequest, authorization: 
 
     try:
         from youtube_transcript_api import YouTubeTranscriptApi
-        transcript = YouTubeTranscriptApi.get_transcript(video_id)
-        if transcript:
-            segments = [
-                {"text": s["text"], "start": s["start"], "end": s["start"] + s["duration"]}
-                for s in transcript
-            ]
-            full_text = " ".join(s["text"] for s in transcript)
-            return {"segments": segments, "full_text": full_text, "language": "en"}
+        fetched = YouTubeTranscriptApi().fetch(video_id)
+        segments = [
+            {"text": s.text, "start": s.start, "end": s.start + s.duration}
+            for s in fetched
+        ]
+        full_text = " ".join(s.text for s in fetched)
+        return {"segments": segments, "full_text": full_text, "language": fetched.language}
     except Exception:
         pass
 
